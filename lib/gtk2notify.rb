@@ -27,6 +27,9 @@ class GtkNotify
     Thread.new {sleep timeout; window.hide_all; Gtk.main_quit}
 
     Gtk.main
+    # The following sleep statement is required to 
+    #                               ensure the above thread is executed in full
+    sleep timeout + 0.2
   end
 end
 
