@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'gtk2notify'
-  s.version = '0.1.1'
+  s.version = '0.1.2'
   s.summary = 'Similar in functionality to libnotify'
   s.authors = ['James Robertson']
   s.files = Dir['lib/gtk2notify.rb']
