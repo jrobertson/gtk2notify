@@ -4,6 +4,11 @@
 
 require 'gtk2'
 
+
+# note: If calling this from within an EventMachine defer statement it 
+#       may be necessary to call it through a system call e.g. 
+#         `ruby -r gtk2notify -e "GtkNotify.show body: 'Testing this works'"`
+
 class GtkNotify
 
   def self.show(body: 'message body goes here', summary: '', 
@@ -27,10 +32,6 @@ class GtkNotify
     Thread.new {sleep timeout; window.hide_all; Gtk.main_quit}
 
     Gtk.main
-    # The following statement is needed in some circumstances to 
-    #                            ensure the Gtk application terminates properly
-
-    Thread.new {sleep timeout; window.hide_all; Gtk.main_quit}
 
   end
 end
