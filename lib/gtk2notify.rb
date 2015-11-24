@@ -2,7 +2,7 @@
 
 # file: gtk2notify.rb
 
-require 'gtk2'
+require 'gtk2svg'
 
 
 # note: If calling this from within an EventMachine defer statement it 
@@ -12,13 +12,33 @@ require 'gtk2'
 class GtkNotify
 
   def self.show(body: 'message body goes here', summary: '', 
-                                        timeout: 2.5, offset: {})
+                                        timeout: 3.5, offset: {})
 
-    offset = {x: 30, y: 10}.merge offset
+    offset = {x: 100, y: 10}.merge offset
 
-    label = Gtk::Label.new(body)
-    window = Gtk::Window.new
-    window.add(label).show_all
+    window = Gtk::Window.new    
+    area = Gtk::DrawingArea.new    
+    
+    svg =<<SVG
+<svg width="300" height="80">
+   <text x="20" y="10" fill="green">#{body}</text>
+</svg>
+SVG
+    doc = Svgle.new(svg, callback: self)
+    a = Gtk2SVG::Render.new(@doc).to_a
+    
+    area.signal_connect("expose_event") do            
+      drawing = Gtk2SVG::DrawingInstructions.new area
+      drawing.render a
+    end
+
+    svg_width, svg_height = %i(width height).map{|x| doc.root.attributes[x].to_i }
+    
+    if svg_width and svg_height then
+      window.set_default_size(svg_width, svg_height)
+    end    
+    
+    window.add(area).show_all
 
     window.decorated = false
     window.border_width = 10
