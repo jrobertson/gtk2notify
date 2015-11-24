@@ -25,7 +25,7 @@ class GtkNotify
 </svg>
 SVG
     doc = Svgle.new(svg, callback: self)
-    a = Gtk2SVG::Render.new(@doc).to_a
+    a = Gtk2SVG::Render.new(doc).to_a
     
     area.signal_connect("expose_event") do            
       drawing = Gtk2SVG::DrawingInstructions.new area
