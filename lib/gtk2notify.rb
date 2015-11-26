@@ -20,8 +20,10 @@ class GtkNotify
     area = Gtk::DrawingArea.new    
     
     svg =<<SVG
-<svg width="300" height="80">
-   <text x="20" y="10" fill="green">#{body}</text>
+<svg width="350" height="80">
+   <text x="20" y="10" fill="green" style="font-size: 14">
+      #{body.gsub(/<\/?\w+[^>]*>/,'')}
+   </text>
 </svg>
 SVG
     doc = Svgle.new(svg, callback: self)
