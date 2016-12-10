@@ -11,7 +11,7 @@ require 'gtk2svg'
 
 class GtkNotify
 
-  def self.show(body: 'message body goes here', summary: '', 
+  def self.show(svg: nil, body: 'message body goes here', summary: '', 
                                         timeout: 3.5, offset: {})
 
     offset = {x: 100, y: 10}.merge offset
@@ -19,8 +19,8 @@ class GtkNotify
     window = Gtk::Window.new    
     area = Gtk::DrawingArea.new    
     
-    svg =<<SVG
-<svg width="350" height="80">
+    svg ||= <<SVG
+<svg width="350" height="80" fill="yellow">
    <text x="20" y="10" fill="green" style="font-size: 14">
       #{body.gsub(/<\/?\w+[^>]*>/,'')}
    </text>
@@ -60,6 +60,6 @@ end
 
 if __FILE__ == $0 then
 
-  GtkNotify.show body: 'Testing the notification system', offset: {x: 120} 
+  GtkNotify.show body: ARGV.inspect, offset: {x: 120} 
 
 end
