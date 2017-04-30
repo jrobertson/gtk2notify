@@ -12,15 +12,16 @@ require 'gtk2svg'
 class GtkNotify
 
   def self.show(svg: nil, body: 'message body goes here', summary: '', 
-                                        timeout: 3.5, offset: {})
+                timeout: 3.5, offset: {}, align: :topright, fill: 'yellow', 
+                color: 'green')
 
-    offset = {x: 100, y: 10}.merge offset
+    offset = {x: 20, y: 10}.merge offset
 
     window = Gtk::Window.new    
     area = Gtk::DrawingArea.new    
     
     svg ||= <<SVG
-<svg width="350" height="80" fill="yellow">
+<svg width="350" height="80" fill="#{fill}">
    <text x="20" y="10" fill="green" style="font-size: 14">
       #{body.gsub(/<\/?\w+[^>]*>/,'')}
    </text>
@@ -48,8 +49,12 @@ SVG
     window.gravity = Gdk::Window::GRAVITY_NORTH_EAST
     width, height =  window.size
     x,y = offset[:x], offset[:y]
-    window.move(Gdk.screen_width - (width + x), y)
-
+    
+    h = {
+      topright: [Gdk.screen_width - (width + x), y],
+      topleft: [x, y]
+    }    
+    window.move(*h[align])
     window.show_all
     Thread.new {sleep timeout; window.hide_all; Gtk.main_quit}
 
